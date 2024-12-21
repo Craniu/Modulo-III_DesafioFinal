@@ -41,9 +41,39 @@ btnConvertir.addEventListener("click", async () => {
     } catch (error) {
     alert(error.message);
   }
+  renderGrafica();
 });
 
+async function getAndCreateDataToChart() {
+    const monedaSeleccionada = document.querySelector("#inMoneda").value;
+    const res = await fetch(`https://mindicador.cl/api/${monedaSeleccionada}`);
+    const datos = await res.json();
+    const ultimos10Dias = datos.serie.slice(0, 10).reverse();
+    const labels = ultimos10Dias.map((dia) => dia.fecha.split("T")[0]);
+    const data = ultimos10Dias.map((dia) => Number(dia.valor));
+    const datasets = [
+        {
+            label: `Valor de ${monedaSeleccionada}`,
+            borderColor: "rgb(255, 99, 132)",
+            data
+        }
+    ];
+    return { labels, datasets };
+}
 
+async function renderGrafica() {
+    document.getElementById("grafico").innerHTML = `
+                            <h1>Valor de los ultimos 10 días</h1>
+                <canvas id="myChart" width="400" height="200"></canvas>
+        `;
+    const data = await getAndCreateDataToChart();
+    const config = {
+        type: "line",
+        data
+    };
+    const myChart = document.getElementById("myChart");
+    new Chart(myChart, config);
+}
 
 
 
