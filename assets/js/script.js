@@ -41,38 +41,6 @@ btnConvertir.addEventListener("click", async () => {
     } catch (error) {
     alert(error.message);
   }
-  const monedaSeleccionada = document.querySelector("#inMoneda").value;
-    const res = await fetch(`https://mindicador.cl/api/${monedaSeleccionada}`);
-    console.log(`https://mindicador.cl/api/${monedaSeleccionada}`);
-    
-    const datos = await res.json();
-
-    // Extraer las fechas y valores de la serie
-    const labels = datos.serie.map((dia) => dia.fecha.split("T")[0]); // Formatear fecha
-    const data = datos.serie.map((dia) => Number(dia.valor));
-
-    // Crear datasets para el gráfico
-    const datasets = [
-        {
-            label: `Valor de ${monedaSeleccionada}`,
-            borderColor: "rgb(255, 99, 132)",
-            data
-        }
-    ];
-
-    const datia = { labels, datasets };
-    
-    // Configuración del gráfico
-    const config = {
-        type: "line",
-        datia
-    };
-
-    // Seleccionar el elemento canvas
-    const myChart = document.getElementById("myChart");
-
-    // Crear el gráfico
-    new Chart(myChart, config);
 });
 
 
